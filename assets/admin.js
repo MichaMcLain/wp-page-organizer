@@ -22,37 +22,12 @@ jQuery(document).ready(function($) {
         },
         
         setupQuickEdit: function() {
-            // Populate quick edit form with current group
             $(document).on('click', 'a.editinline', function() {
                 var $row = $(this).closest('tr');
-                var postId = $row.attr('id').replace('post-', '');
-                var $groupCell = $row.find('.column-page_group');
-                
-                // Get the current group text, handling both badge and plain text formats
-                var currentGroupText = '';
-                var $badge = $groupCell.find('.page-group-badge:not(.ungrouped)');
-                if ($badge.length > 0) {
-                    currentGroupText = $badge.first().text().trim();
-                } else if ($groupCell.find('.page-group-badge.ungrouped').length > 0) {
-                    currentGroupText = 'Ungrouped';
-                } else {
-                    currentGroupText = $groupCell.text().trim();
-                }
-                
+                var $badge = $row.find('.column-page_group .page-group-badge:not(.ungrouped)');
+                var groupId = $badge.length ? $badge.first().data('group-id') : '0';
                 setTimeout(function() {
-                    var $select = $('.page-organizer-group-select');
-                    
-                    if (currentGroupText === 'Ungrouped' || currentGroupText === '') {
-                        $select.val('0');
-                    } else {
-                        // Find the option that matches the current group name
-                        $select.find('option').each(function() {
-                            if ($(this).text().trim() === currentGroupText) {
-                                $select.val($(this).val());
-                                return false;
-                            }
-                        });
-                    }
+                    $('.page-organizer-group-select').val(groupId || '0');
                 }, 200);
             });
         },

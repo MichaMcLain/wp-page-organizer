@@ -3,7 +3,7 @@
  * Plugin Name: WP Page Organizer
  * Plugin URI: https://searchclickgrow.com
  * Description: Organize pages by custom definable groups without modifying the actual pages. Provides admin interface for group management and page filtering.
- * Version: 1.0
+ * Version: 1.1
  * Author: Search Click Grow
  * Author URI: https://searchclickgrow.com
  * License: GPL v2 or later
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('PAGE_ORGANIZER_VERSION', '1.0');
+define('PAGE_ORGANIZER_VERSION', '1.1');
 define('PAGE_ORGANIZER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PAGE_ORGANIZER_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PAGE_ORGANIZER_PLUGIN_FILE', __FILE__);
@@ -242,7 +242,7 @@ class PageOrganizerPlugin {
             $stats = $this->get_all_group_stats();
         }
         
-        include PAGE_ORGANIZER_PLUGIN_DIR . 'admin/views/groups-page.php';
+        include PAGE_ORGANIZER_PLUGIN_DIR . 'admin/groups-page.php';
     }
     
     /**
@@ -588,7 +588,7 @@ class PageOrganizerPlugin {
         if (strpos($hook, 'page-organizer') !== false || $hook === 'edit.php') {
             wp_enqueue_script(
                 'page-organizer-admin',
-                PAGE_ORGANIZER_PLUGIN_URL . 'assets/js/admin.js',
+                PAGE_ORGANIZER_PLUGIN_URL . 'assets/admin.js',
                 array('jquery'),
                 PAGE_ORGANIZER_VERSION,
                 true
@@ -596,7 +596,7 @@ class PageOrganizerPlugin {
             
             wp_enqueue_style(
                 'page-organizer-admin',
-                PAGE_ORGANIZER_PLUGIN_URL . 'assets/css/admin.css',
+                PAGE_ORGANIZER_PLUGIN_URL . 'assets/admin.css',
                 array(),
                 PAGE_ORGANIZER_VERSION
             );
@@ -630,7 +630,7 @@ class PageOrganizerPlugin {
                 echo '<div class="multiple-groups">';
                 foreach ($groups as $group) {
                     $color = isset($group->color) ? $group->color : '#0073aa';
-                    echo '<span class="page-group-badge" style="background-color: ' . esc_attr($color) . ';">' . esc_html($group->name) . '</span>';
+                    echo '<span class="page-group-badge" data-group-id="' . esc_attr($group->id) . '" style="background-color: ' . esc_attr($color) . ';">' . esc_html($group->name) . '</span>';
                 }
                 echo '</div>';
             } else {
@@ -645,7 +645,23 @@ class PageOrganizerPlugin {
     public function add_quick_edit_fields($column_name, $post_type) {
         if ($column_name === 'page_group' && $post_type === 'page') {
             $groups = $this->get_all_groups();
-            include PAGE_ORGANIZER_PLUGIN_DIR . 'admin/views/quick-edit-fields.php';
+            ?>
+            <fieldset class="inline-edit-col-right">
+                <div class="inline-edit-col">
+                    <label>
+                        <span class="title"><?php _e('Page Group', 'page-organizer'); ?></span>
+                        <select name="page_organizer_group" class="page-organizer-group-select">
+                            <option value="0"><?php _e('Ungrouped', 'page-organizer'); ?></option>
+                            <?php foreach ($groups as $group): ?>
+                                <option value="<?php echo esc_attr($group->id); ?>">
+                                    <?php echo esc_html($group->name); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+            </fieldset>
+            <?php
         }
     }
     
@@ -655,7 +671,25 @@ class PageOrganizerPlugin {
     public function add_bulk_edit_fields($column_name, $post_type) {
         if ($column_name === 'page_group' && $post_type === 'page') {
             $groups = $this->get_all_groups();
-            include PAGE_ORGANIZER_PLUGIN_DIR . 'admin/views/bulk-edit-fields.php';
+            ?>
+            <fieldset class="inline-edit-col-right">
+                <div class="inline-edit-col">
+                    <?php wp_nonce_field('page_organizer_bulk_edit', 'page_organizer_bulk_edit_nonce'); ?>
+                    <label>
+                        <span class="title"><?php _e('Page Group', 'page-organizer'); ?></span>
+                        <select name="page_organizer_group_bulk" class="page-organizer-group-bulk-select">
+                            <option value="-1"><?php _e('— No Change —', 'page-organizer'); ?></option>
+                            <option value="0"><?php _e('Ungrouped', 'page-organizer'); ?></option>
+                            <?php foreach ($groups as $group): ?>
+                                <option value="<?php echo esc_attr($group->id); ?>">
+                                    <?php echo esc_html($group->name); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+            </fieldset>
+            <?php
         }
     }
     
