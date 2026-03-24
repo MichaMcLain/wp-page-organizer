@@ -26,8 +26,14 @@ jQuery(document).ready(function($) {
                 var $row = $(this).closest('tr');
                 var $badge = $row.find('.column-page_group .page-group-badge:not(.ungrouped)');
                 var groupId = $badge.length ? $badge.first().data('group-id') : '0';
+                console.log('Quick edit clicked');
+                console.log('Badge found:', $badge.length, $badge);
+                console.log('Group ID read:', groupId);
                 setTimeout(function() {
-                    $('.page-organizer-group-select').val(groupId || '0');
+                    var $select = $('.page-organizer-group-select');
+                    console.log('Select found:', $select.length);
+                    console.log('Setting value to:', groupId || '0');
+                    $select.val(groupId || '0');
                 }, 200);
             });
         },
