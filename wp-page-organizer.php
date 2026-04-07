@@ -98,7 +98,7 @@ class PageOrganizerPlugin {
      * Include required files
      */
     private function include_files() {
-        // Files are included directly in main plugin file for v0.1 compatibility
+        // All code consolidated into main plugin file as of v1.1
     }
     
     /**

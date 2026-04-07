@@ -1,4 +1,4 @@
-# Page Organizer WordPress Plugin v0.17
+# WP Page Organizer v1.2
 
 A WordPress plugin that helps organize pages by custom definable groups without modifying the actual pages. Provides an admin interface for group management, page assignment via quick/bulk edit, and filtering capabilities.
 
@@ -72,25 +72,13 @@ The plugin creates two custom database tables:
 ### File Structure
 
 ```
-page-organizer-plugin/
-├── page-organizer.php          # Main plugin file
-├── readme.txt                  # WordPress plugin readme
-├── README.md                   # This file
+wp-page-organizer/
+├── wp-page-organizer.php     # Main plugin file — all PHP logic
 ├── admin/
-│   ├── class-admin.php         # Admin functionality
-│   ├── page-groups.php         # Admin page template
-│   └── views/
-│       ├── groups-page.php     # Group management interface
-│       ├── quick-edit-fields.php
-│       └── bulk-edit-fields.php
-├── includes/
-│   ├── class-database.php      # Database management
-│   └── class-groups.php        # Group operations
+│   └── groups-page.php       # Admin page view template
 └── assets/
-    ├── css/
-    │   └── admin.css           # Admin styles
-    └── js/
-        └── admin.js            # Admin JavaScript
+    ├── admin.css             # Admin styles
+    └── admin.js              # Admin JavaScript
 ```
 
 ### WordPress Hooks
@@ -115,7 +103,7 @@ The plugin integrates with WordPress using these hooks:
 
 ### Plugin Information
 
-- **Version**: 1.0
+- **Version**: 1.2
 - **Author**: Search Click Grow
 - **Website**: https://searchclickgrow.com
 - **License**: GPL v2 or later
@@ -133,6 +121,25 @@ The plugin integrates with WordPress using these hooks:
 - Minimal impact on page load times
 - Only loads admin assets on relevant admin pages
 - Optimized JavaScript for smooth user experience
+
+## Changelog
+
+### v1.2 — April 2026
+- Fixed critical quick edit bug where opening Quick Edit for any reason would strip the page group assignment on save
+- Added "No Change" default option to quick edit dropdown to prevent unintended group changes
+- Updated JS selectors for correct group display when Quick Edit opens
+
+### v1.1.1 — April 2026
+- Added debug console.log statements to diagnose quick edit display issue (debug build only)
+
+### v1.1 — March 2026
+- Consolidated plugin from 12 files to 4 core files
+- Removed dead code classes (class-database.php, class-groups.php, class-admin.php)
+- Fixed asset paths and removed duplicate inline styles
+
+### v1.0 — January 2026
+- Initial release
+- Page group CRUD with colored badges, filter by group, Quick Edit, Bulk Edit, JSON export/import, statistics panel, help modal, database auto-upgrade system
 
 ## Support
 

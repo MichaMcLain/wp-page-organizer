@@ -2,6 +2,10 @@
 
 ---
 
+## [v1.2] — 2026-04-06
+Bug fix
+Fixed critical quick edit bug where opening Quick Edit for any reason would strip the page group assignment on save. Added "No Change" default option to quick edit dropdown. Updated JS selectors for correct group display on open.
+
 ## [v1.1.1] — 2026-04-05
 Bug fix (in progress)
 Added 5 console.log debug statements to setupQuickEdit in admin.js to diagnose Quick Edit group display bug. Awaiting team console output to identify root cause.

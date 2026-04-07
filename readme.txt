@@ -4,7 +4,7 @@ Tags: pages, organization, groups, admin, management
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.0
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,7 +63,7 @@ Your page assignments are stored in custom database tables. If you deactivate th
 
 = Can I export my group assignments? =
 
-This feature is not currently available but may be added in future versions.
+Yes, you can export and import group definitions (name, description, color) as JSON from the Page Groups admin page.
 
 == Screenshots ==
 
@@ -74,164 +74,39 @@ This feature is not currently available but may be added in future versions.
 
 == Changelog ==
 
-= 0.17 =
-* FIXED: Bulk edit functionality now works using the same method as Quick Edit
-* Changed bulk edit field name from 'page_group' to 'page_organizer_group_bulk' to match save handler
-* Removed complex AJAX bulk edit system in favor of simple form submission like Quick Edit
-* Simplified JavaScript - bulk edit now uses regular WordPress form submission
-* Cleaned up save_page_group method with better logic for both quick edit and bulk edit
-* Both WP Engine live site and download package updated to version 0.17
+= 1.2 =
+* Fixed critical quick edit bug where opening Quick Edit for any reason would strip the page group assignment on save
+* Added "No Change" default option to quick edit dropdown to prevent unintended group changes
+* Updated JS selectors for correct group display when Quick Edit opens
 
-= 0.16 =
-* FIXED: Import functionality now works properly - fixed nonce mismatch issue
-* Import form now uses same nonce system as other working forms (page_organizer_groups)
-* Removed duplicate nonce verification from import handler
-* Import now properly processes JSON files and creates/updates groups
-* Both WP Engine live site and download package updated to version 0.16
+= 1.1.1 =
+* Added debug console.log statements to diagnose quick edit display issue (debug build only)
 
-= 0.15 =
-* FIXED: Export now outputs proper JSON data instead of HTML - added output buffer clearing and proper headers
-* ENHANCED: Bulk edit AJAX handler with comprehensive debugging and error logging
-* Improved export reliability with wp_die() instead of exit for WordPress compatibility
-* Added detailed logging to bulk edit to identify any remaining issues
-* Export JSON now contains proper group data: name, description, color for import functionality
-* Both WP Engine live site and download package updated to version 0.15
+= 1.1 =
+* Consolidated plugin from 12 files to 4 core files
+* Removed dead code classes (class-database.php, class-groups.php, class-admin.php)
+* Fixed asset paths and removed duplicate inline styles
 
-= 0.14 =
-* MAJOR FIX: Export functionality now works properly - fixed nonce mismatch issue
-* MAJOR FIX: Bulk edit functionality now works properly - implemented proper AJAX-based bulk edit system
-* Fixed export form to use same nonce system as other working forms (page_organizer_groups)
-* Added dedicated AJAX handler for bulk edit operations following WordPress standards
-* Bulk edit now uses proper WordPress AJAX workflow instead of save_post hook
-* Both export and bulk edit have been thoroughly researched and implemented correctly
-* All core functionality now working: group management, quick edit, bulk edit, export/import, filtering
-
-= 0.13 =
-* Added comprehensive debug logging for export nonce verification to identify exact issue
-* Completely rewrote bulk edit detection using WordPress standard methods
-* Enhanced bulk edit detection with multiple fallback methods (HTTP_REFERER, action parameters)
-* Added detailed logging for both export and bulk edit processes to trace exact workflow
-* Improved bulk edit integration with proper WordPress bulk edit detection
-
-= 0.12 =
-* Fixed export nonce field - now properly specifies field name parameter to match verification
-* Added additional bulk edit hook (wp_ajax_inline-save) to catch more bulk edit scenarios
-* Enhanced bulk edit integration with multiple WordPress AJAX endpoints
-* Export security check should now work properly
-
-= 0.11 =
-* Fixed export security check - corrected nonce field generation and verification
-* Added debug logging to bulk edit save functionality to identify issues
-* Enhanced bulk edit troubleshooting with detailed error logging
-* Export functionality now works without "Security check failed" error
-
-= 0.10 =
-* FIXED! Removed extra endif statement causing PHP syntax error at line 225
-* Restored normal admin page functionality (removed diagnostic mode)
-* Admin page now loads properly without critical errors
-* All features from 0.6 (export/import, data retention, colors) are now functional
-
-= 0.9 =
-* Added comprehensive diagnostic mode to identify exact causes of critical errors
-* Fixed uninstall behavior - now defaults to keeping data (checkbox checked by default)
-* Enhanced error reporting with detailed stack traces and line numbers
-* Improved database debugging with step-by-step validation
-* Proper uninstall data retention logic implementation
-
-= 0.8 =
-* Enhanced database initialization with comprehensive error handling
-* Added automatic table creation when admin page is accessed
-* Improved admin page safety with graceful fallbacks for missing tables
-* Added database permission error messages for troubleshooting
-* Comprehensive fix for critical admin page loading errors
-
-= 0.7 =
-* Fixed critical error on admin page caused by missing database table checks
-* Added proper error handling for database queries in statistics methods
-* Improved database table existence validation before running queries
-* Enhanced stability when plugin is first installed or database tables are missing
-
-= 0.6 =
-* Added uninstall data retention option - choose to keep or delete data when plugin is removed
-* Added export/import functionality for groups (names and colors only, not page assignments)
-* Enhanced bulk edit save functionality with additional WordPress integration hooks
-* Improved plugin settings interface with organized sections
-* Better data persistence across plugin updates and reinstalls
-
-= 0.5 =
-* Fixed database upgrade system with proper column migration for 0.1 users
-* Enhanced bulk edit save functionality with better WordPress integration
-* Reduced preset colors to 6 primary colors (Blue, Red, Green, Orange, Purple, Yellow)
-* Improved clear filter button styling to match WordPress active button design
-* Better error handling and compatibility with existing data
-
-= 0.4 =
-* Fixed bulk edit save functionality - now properly saves group assignments
-* Added database upgrade system to restore existing group data
-* Added clear filter button for easy filter removal
-* Added color picker with 10 preset colors and custom hex input
-* Group labels now display in chosen colors throughout admin interface
-* Enhanced visual design with colored group badges
-
-= 0.3 =
-* Version update - no functional changes
-
-= 0.2 =
-* Fixed quick edit and bulk edit dropdown display issues
-* Improved JavaScript timing for edit interface integration
-* Enhanced compatibility with WordPress edit screens
-
-= 0.1 =
+= 1.0 =
 * Initial release
-* Create custom page groups
+* Create custom page groups with name, description, and color
 * Assign pages to groups via Quick Edit and Bulk Edit
-* Filter pages by groups
-* Admin interface for group management
-* Statistics and overview
+* Filter pages by groups in the admin area
+* Colored badge display in pages list column
+* JSON export and import for group definitions
+* Statistics panel and help modal
+* Database auto-upgrade system
 
 == Upgrade Notice ==
 
-= 0.17 =
-BULK EDIT FINALLY WORKS! Simplified approach using same method as Quick Edit. All major functionality now working: create groups, assign pages via quick/bulk edit, export/import, and filtering.
+= 1.2 =
+Critical fix: Quick Edit would silently strip the page group assignment on save for any page. Upgrade immediately to prevent data loss. Includes a new "No Change" default option so Quick Edit never removes a group unintentionally.
 
-= 0.16 =
-DEBUG VERSION! Added comprehensive logging to identify exact causes of export and bulk edit issues. Check error logs after testing.
+= 1.1 =
+Major refactor: Plugin consolidated from 12 files to 4 core files. No functional changes to group data or page assignments.
 
-= 0.12 =
-Fixed export nonce issue and enhanced bulk edit integration. Export should now work without security errors.
-
-= 0.11 =
-Fixed export security error and added bulk edit debugging. Export now works properly without security check failures.
-
-= 0.10 =
-CRITICAL FIX! Admin page now works properly. Fixed PHP syntax error that was causing critical errors since 0.6.
-
-= 0.9 =
-DIAGNOSTIC VERSION! This version will identify the exact cause of critical errors and fix uninstall data retention behavior.
-
-= 0.8 =
-CRITICAL FIX! Comprehensive solution for admin page loading errors. Enhanced database initialization and error handling.
-
-= 0.7 =
-Critical fix! Resolves admin page loading error. Essential update for all users experiencing the critical error in 0.6.
-
-= 0.6 =
-Major update! Added data retention options and export/import functionality. Now you can control data deletion and easily deploy groups across multiple sites.
-
-= 0.5 =
-Critical update! Fixes database migration for 0.1 users, improves bulk edit functionality, and enhances UI design.
-
-= 0.4 =
-Major update! Fixed bulk edit functionality, restored data access, added clear filter button and color picker with colored group labels.
-
-= 0.3 =
-Version update - no functional changes from 0.2.
-
-= 0.2 =
-Important fix for quick edit and bulk edit functionality. Upgrade recommended for all users.
-
-= 0.1 =
-Initial release of Page Organizer plugin.
+= 1.0 =
+Initial release of WP Page Organizer.
 
 == Developer Notes ==
 
