@@ -1,5 +1,5 @@
 # CLAUDE.md — WP Page Organizer
-Last Updated: April 5, 2026
+Last Updated: April 6, 2026
 
 ---
 
@@ -8,8 +8,8 @@ Last Updated: April 5, 2026
 - Type: WordPress admin-only plugin (no hosting required)
 - GitHub repo: github.com/MichaMcLain/wp-page-organizer
 - Local path: ~/Desktop/App Projects/wp-page-organizer
-- Current version: v1.1.1
-- Status: Feature complete — one active bug pending fix
+- Current version: v1.2
+- Status: Feature complete
 - Slack channel: #agent-wporganizer
 
 ---
@@ -70,29 +70,17 @@ All logic lives in the single PageOrganizerPlugin singleton class. No separate c
 
 ---
 
-## Active Bug — Quick Edit Shows Ungrouped
-Symptom: Clicking Quick Edit on a grouped page shows "Ungrouped" in the dropdown instead of the actual group. If user hits Update it saves as Ungrouped. Cancel preserves the original.
+## Bug History — Quick Edit Group Stripping (Fixed in v1.2)
+Symptom: Opening Quick Edit on any page would silently strip the page group on save, even if no change was intended.
 
-Root cause: JS not correctly reading data-group-id attribute from badge in column-page_group cell.
+Root cause: Quick edit dropdown defaulted to "Ungrouped" (value 0), so any Update click would overwrite the group.
 
-What has been done:
-- v1.1: Fixed JS to read data-group-id directly from badge
-- v1.1: PHP confirmed to output data-group-id on badge at line 633
-- v1.1.1: Added 5 console.log statements to setupQuickEdit in admin.js
-
-Next step: Team must install v1.1.1, open browser console, click Quick Edit on a grouped page, and report console output. That output will identify exactly where the chain breaks.
-
-Console logs added (in order):
-1. 'Quick edit clicked'
-2. 'Badge found:', $badge.length, $badge
-3. 'Group ID read:', groupId
-4. 'Select found:', $select.length
-5. 'Setting value to:', groupId || '0'
+Fix (v1.2): Added "— No Change —" (value -1) as the default option. save_post now skips the assignment entirely when value is -1. Rewrote JS selectors so the dropdown correctly pre-selects the current group when Quick Edit opens. Removed all debug console.log statements.
 
 ---
 
 ## What Is Planned
-- Nothing formally scoped — plugin is feature complete once quick edit bug is resolved
+- Nothing formally scoped — plugin is feature complete
 - LocalWP test environment recommended for future iteration
 
 ---
