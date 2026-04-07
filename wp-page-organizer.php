@@ -3,7 +3,7 @@
  * Plugin Name: WP Page Organizer
  * Plugin URI: https://searchclickgrow.com
  * Description: Organize pages by custom definable groups without modifying the actual pages. Provides admin interface for group management and page filtering.
- * Version: 1.1
+ * Version: 1.2
  * Author: Search Click Grow
  * Author URI: https://searchclickgrow.com
  * License: GPL v2 or later
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('PAGE_ORGANIZER_VERSION', '1.1');
+define('PAGE_ORGANIZER_VERSION', '1.2');
 define('PAGE_ORGANIZER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PAGE_ORGANIZER_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PAGE_ORGANIZER_PLUGIN_FILE', __FILE__);
@@ -651,6 +651,7 @@ class PageOrganizerPlugin {
                     <label>
                         <span class="title"><?php _e('Page Group', 'page-organizer'); ?></span>
                         <select name="page_organizer_group" class="page-organizer-group-select">
+                            <option value="-1"><?php _e('— No Change —', 'page-organizer'); ?></option>
                             <option value="0"><?php _e('Ungrouped', 'page-organizer'); ?></option>
                             <?php foreach ($groups as $group): ?>
                                 <option value="<?php echo esc_attr($group->id); ?>">
@@ -712,7 +713,9 @@ class PageOrganizerPlugin {
         // Handle quick edit (single page)
         if (isset($_POST['page_organizer_group'])) {
             $group_id = intval($_POST['page_organizer_group']);
-            $this->assign_page_to_group($post_id, $group_id);
+            if ($group_id !== -1) {
+                $this->assign_page_to_group($post_id, $group_id);
+            }
         }
         
         // Handle bulk edit (multiple pages)

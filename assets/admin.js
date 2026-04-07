@@ -24,24 +24,29 @@ jQuery(document).ready(function($) {
         setupQuickEdit: function() {
             $(document).on('click', 'a.editinline', function() {
                 var $row = $(this).closest('tr');
-                var $badge = $row.find('.column-page_group .page-group-badge:not(.ungrouped)');
-                var groupId = $badge.length ? $badge.first().data('group-id') : '0';
-                console.log('Quick edit clicked');
-                console.log('Badge found:', $badge.length, $badge);
-                console.log('Group ID read:', groupId);
+                var $badge = $row.find('td.column-page_group .page-group-badge:not(.ungrouped)');
+                var groupId = '-1';
+                if ($badge.length) {
+                    groupId = $badge.first().data('group-id');
+                } else {
+                    var $ungroupedBadge = $row.find('td.column-page_group .page-group-badge.ungrouped');
+                    if ($ungroupedBadge.length) {
+                        groupId = '0';
+                    }
+                }
                 setTimeout(function() {
-                    var $select = $('.page-organizer-group-select');
-                    console.log('Select found:', $select.length);
-                    console.log('Setting value to:', groupId || '0');
-                    $select.val(groupId || '0');
-                }, 200);
+                    var $select = $('#inline-edit .page-organizer-group-select, .inline-edit-row .page-organizer-group-select');
+                    if (!$select.length) {
+                        $select = $('.page-organizer-group-select');
+                    }
+                    $select.val(groupId);
+                }, 300);
             });
         },
         
         setupBulkEdit: function() {
             // Bulk edit works through regular form submission, no AJAX needed
             // The save_page_group method handles both quick edit and bulk edit
-            console.log('Bulk edit setup: Using regular form submission like Quick Edit');
         },
         
         setupColorPicker: function() {
